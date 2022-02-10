@@ -1,0 +1,146 @@
+---
+title: "Survey_Data_Analysis"
+author: "20122011_thomaskutty"
+date: "30/12/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+
+
+# LOADING DATA
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+data = read.csv("C:\\Users\\ASUS\\Documents\\My_R_files\\data_r_works\\opinions.csv",header = TRUE)
+str_inds = str_which(data$genre, pattern = "Action")
+action = data[str_inds,]
+```
+
+
+-----------------------------------------------------------------------------
+# ANALYSIS1 
+
+Question : At times i can't control the urge to hit someone. 
+
+H null : Tv series discussion and above mentioned aggressive behavoiur is independent. 
+H alt : Tv seriese discussion and above mentioned aggressive behaviour is dependent. 
+
+```{r}
+table0 = table(data$Q4,data$Q17)     # contigency table 
+table0
+```
+
+
+```{r}
+chisq.test(table0)
+```
+#### Conclusion : p value is less than the significance level so we reject the null hypotheis and concluded that tv series discussion and the responses to the above mentioned question are related.
+
+
+------------------------------------------------------------------------------------------
+
+
+# ANALYSI 2 : chi sqaure independence tests
+
+Question1 = prefer action/adventure over comedy
+Question2 = wonder why sometimes i feel so bitter about things. 
+Ho =  responses to the question1 is independent to that of question2
+H1 = responses are dependent
+
+```{r}
+table1 = table(data$Q1,data$Q19)     # contingency table 
+table1
+```
+```{r}
+barplot(table1, beside = TRUE) 
+```
+
+
+```{r warning=FALSE}
+chisq.test(table1)
+```
+#### conclusion : So, here we the p value is less than the alpha level, we reject the null hypothesis and concluded that the responses are dependent.  
+
+------------------------------------------------------------------------------------------------
+
+
+
+# ANALYSIS 3 :  Goodness of fit test for analysing the following question 
+Question  : At times i feel like a bomb ready to explode. 
+
+# Ho : proportion of categories for above Question is 1/5 ( are due to randomness)  among people who watch tv often/very often
+# H1 : proportion of categories for Question  is not 1/5  
+
+```{r}
+library(dplyr)
+df2 = data %>%
+  filter(hours  == "3 - 4 hours" | hours ==  "	More than 4 hours" |hours ==  "2 - 3 hours")
+table2 = table(df2$Q15)
+table2
+```
+```{r}
+barplot(table2) 
+```
+
+Actually here we are checking the whethere these count is random or not. So, we compare it with the expected probabilities. 
+
+```{r}
+probabilities =c(1/5,1/5,1/5 , 1/5, 1/5)
+categories = c(19, 11, 6, 9, 5)
+chisq.test(categories, p = probabilities)
+
+```
+#Conclusion : Here p value is less than the significance level. so we rejected the null hypothesis and concluded that among people who watch TV more often the ratios of responses are significantly different. This is another evidence for the fact that watching tv cause aggressive behaviour. 
+
+
+---------------------------------------------------------------------------------------------
+
+
+
+# ANALYSIS 4 
+Question 17: I let my anger show when i do not get what i want.
+
+The hypothesis are : 
+Ho = TV watching hours and anger is independent
+H1 = TV watching hours and anger are related ( dependent )
+
+```{r}
+table5 = table(data$hours,data$Q17)     # contigency table 
+table5
+```
+```{r}
+barplot(table5, beside = TRUE) 
+```
+
+
+```{r warning=FALSE}
+chisq.test(table5)
+```
+Conclusion : p value is less than the siginificance level so we reject the null hypothesis and concluded that the number of hours spending before tv and anger showing is dependent. 
+
+
+# ANALYSIS 5 
+Question 1: I tend to watch TV shows during my restroom breaks also
+Question 2: Some of my friends think I am a hothead
+
+
+```{r}
+table6 = table(data$Q6,data$Q16)     # contigency table 
+table6
+```
+## Visualization 
+```{r}
+barplot(table6, beside = TRUE) 
+```
+```{r warning=FALSE}
+exp6 = chisq.test(data$Q6,data$Q16)$expected     # expected table 
+exp6
+```
+
+
+```{r warning=FALSE}
+chisq.test(table6)
+```
+## Conclusion : So, here p value is less than the siginificance level so we reject the null hypothesis and concluded that the watching tv shows and the anger level is related.

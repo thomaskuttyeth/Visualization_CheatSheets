@@ -1,0 +1,30 @@
+---
+title: "pipe operator"
+author: "20122011_thomaskutty"
+date: "01/01/2021"
+output: word_document
+---
+
+nested filtering 
+```{r}
+library(dplyr)
+df = mtcars
+result = arrange(sample_n(filter(df, mpg>20),size = 5),desc(mpg))
+result
+```
+
+using multiple assignments - 
+
+```{r}
+a = filter(df,mpg>20)
+b = sample_n(a,size = 5)
+result = arrange(b,desc(mpg))
+result
+```
+
+
+pipe operator 
+```{r}
+df %>% filter(mpg>20) %>% sample_n(size = 5) %>%
+    arrange(desc(mpg))
+```

@@ -1,0 +1,79 @@
+---
+title: "data viz - project"
+author: "Thomaskutty Reji"
+date: "02/01/2021"
+output: word_document
+---
+
+```{r}
+Economist  = read.csv('Economist_Assignment_Data.csv')
+head(Economist)
+```
+creating the scatter plot for cpi and hdi
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+plt = ggplot(Economist, aes(x = CPI, y = HDI, color = factor(Region))) + 
+  geom_point() 
+plt 
+```
+
+
+```{r}
+plt = ggplot(Economist, aes(x = CPI, y = HDI, color = factor(Region))) + 
+  geom_point(shape= 21,size = 3) 
+plt
+
+```
+
+
+
+adding the trend line 
+```{r message=FALSE, warning=FALSE}
+plt = ggplot(Economist, aes(x = CPI, y = HDI, color = factor(Region))) + 
+  geom_point(shape= 21,size = 3) + geom_smooth(aes(group = 1)) 
+plt
+```
+
+
+
+```{r}
+plt = ggplot(Economist, aes(x = CPI, y = HDI, color = factor(Region))) + 
+  geom_point(shape= 21,size = 3) + geom_smooth(aes(group = 1),method = lm, formula = y ~log(x), se = FALSE, color  = 'red') 
+plt
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+plt2 = plt + geom_text(aes(label = Country )) 
+plt2
+```
+
+
+
+
+
+```{r}
+pointsToLabel <- c("Russia", "Venezuela", "Iraq", "Myanmar", "Sudan",
+                   "Afghanistan", "Congo", "Greece", "Argentina", "Brazil",
+                   "India", "Italy", "China", "South Africa", "Spane",
+                   "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France",
+                   "United States", "Germany", "Britain", "Barbados", "Norway", "Japan",
+                   "New Zealand", "Singapore")
+
+pl3 <- plt + geom_text(aes(label = Country), color = "gray20", 
+                data = subset(Economist, Country %in% pointsToLabel),check_overlap = TRUE)
+pl3
+```
+
+
+
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+pl3 + ggtitle("Corruption and Human development") + xlab('Corruption Perceptons Index, 2011') + ylab( " Human Development Index, 2011")
+```
+
+
+

@@ -1,0 +1,104 @@
+---
+title: "barplot_trail"
+author: "20122011_thomaskutty"
+date: "30/12/2020"
+output: word_document
+---
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+library(tidyverse)
+data <- mtcars
+data$cyl <- as.factor(data$cyl)
+# Bar plot 
+barplot(table(data$cyl))
+
+# using ggplot2
+data %>% ggplot(aes(x = cyl))+ geom_bar()+coord_flip() 
+
+# coordinate flipping 
+data %>% ggplot(aes(x = cyl)) +
+         geom_bar(fill = '#647BB8')+
+         ggtitle("cyl-plot")+
+         theme(plot.title = element_text(hjust = 0.5))
+```
+
+# Coordinate flipping 
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+# coordinate flipping 
+data %>% ggplot(aes(x = cyl)) +
+         geom_bar(fill = '#647BB8')+
+         ggtitle("cyl-plot")+
+         theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+# plotting summary from group by 
+table2 = data %>% group_by(cyl) %>% 
+                  summarize(avg_mpg = mean(mpg))
+table2
+```
+
+
+```{r}
+table2 %>% ggplot(aes(x = cyl, y = avg_mpg))+
+           geom_col(fill = '#647BB8')+
+           ggtitle("cyl - avg mpg") +
+           theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+table2 %>% ggplot(aes(x = cyl, y = avg_mpg)) +
+    geom_bar(stat = 'identity',aes(fill = cyl))+
+    ggtitle("cyl - avg mpg 2") +
+    theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+# loading txhousing data set 
+data("txhousing")
+# lets create a bar chart of sales amount with respect to year. 
+
+txaggregate = aggregate(sales~year, txhousing, mean)             # aggregation 
+txaggregate
+```
+
+
+```{r fig.height=5, fig.width=10}
+txaggregate$sales = round(txaggregate$sales,2)
+txaggregate
+ggplot(txaggregate, aes(x = year, y = sales)) + geom_bar(stat = 'identity',fill = '#647BB8' )+
+    geom_text(aes(label=sales), vjust= 5,size= 4)
+```
+
+Udemy notes 
+```{r}
+df = mpg
+pl = ggplot(df,aes(x = class)) + geom_bar(fill = '#647BB8')
+pl
+```
+
+
+
+
+```{r}
+df = mpg
+pl = ggplot(df,aes(x = class)) + geom_bar(aes(fill = drv))
+pl
+```
+
+
+```{r}
+library(ggsci)
+df = mpg
+pl = ggplot(df,aes(x = class)) + 
+    geom_bar(aes(fill = drv),position = "dodge")
+pl
+```
+
+
+```{r}
+
+df = mpg
+pl = ggplot(df,aes(x = class)) + geom_bar(aes(fill = drv))
+pl
+```

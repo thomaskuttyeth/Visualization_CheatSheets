@@ -1,0 +1,109 @@
+---
+title: "data analysis using dplyr"
+author: "20122011_thomaskutty"
+date: "01/01/2021"
+output: word_document
+---
+## Data Analysis using Dyplr
+```{r fig.height=3, fig.width=3, message=FALSE, warning=FALSE}
+library(dplyr)
+library("nycflights13")
+df = flights
+head(df)
+```
+
+Getting the summary of df 
+
+```{r}
+summary (df)
+```
+
+filter() and slice()
+arrange()
+select() and rename()
+distict()
+mutate() and transmute()
+summarise()
+sample_n() and sample_frac()
+
+
+```{r}
+filter(df,month ==11, day == 3, carrier == "AA")
+```
+
+
+using bracket notation 
+```{r}
+df[df$month == 11 & df$day ==3 & df$carrier == "AA" , ]
+```
+
+```{r}
+slice (df, 1:7)
+```
+
+
+ordering the data using arrange function in dyplr
+```{r}
+head(arrange(df, year, month, day, arr_time))
+```
+
+descending ordering 
+```{r}
+head(arrange(df, month, desc(day)))
+```
+
+selecting columns 
+```{r}
+head(select(df, carrier,arr_time))
+```
+renaming columns 
+```{r}
+head(rename(df, MONTH = month ))
+```
+
+
+getting the distinct values 
+```{r}
+distinct(select(df, carrier))
+```
+
+
+mutate function : adding new columns using existing columns 
+
+```{r}
+head(mutate(df, new_col = arr_delay*dep_delay))
+```
+
+transmute function only returns the new column created
+```{r}
+head(transmute(df, new_col = arr_delay*dep_delay))
+```
+
+summarise function 
+```{r}
+summarise(df, avg_air_time = mean(air_time, na.rm = TRUE)) 
+```
+```{r}
+summarise(df, total_time = sum(air_time, na.rm = TRUE)) 
+```
+
+
+Taking samples of dataframe
+10 random samples 
+```{r}
+sample_n(df, 10)
+```
+
+
+splitting the dataframe using fractions 
+```{r}
+train = sample_frac(flights,0.80)
+train 
+```
+
+```{r}
+print(dim(df))
+print(dim(train))
+```
+
+
